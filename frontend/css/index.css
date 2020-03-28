@@ -1,0 +1,67 @@
+.mw6 {
+    max-width: 26rem;
+}
+
+.min-height-24 {
+    min-height: 24rem;
+}
+
+.editable-pre-wrapped {
+    white-space: normal;
+}
+
+.editable-click, a.editable-click, a.editable-click:hover {
+    text-decoration: none;
+    border-bottom: dashed 1px lightgrey;
+}
+
+.editable-container.editable-inline {
+    width: 100%;
+}
+
+table .editable-input {
+    width: inherit;
+}
+
+.editable-input {
+    width: 100%;
+}
+
+/*TODO should be 100% when small screen. Can use media query.*/
+textarea.input-large {
+    width: 80%;
+}
+
+.editable-empty, .editable-empty:hover, .editable-empty:focus {
+    color: #1a1717;
+}
+
+::selection {
+    background: #FCF3CF;
+    color: #1a1717;
+}
+
+#instantclick-bar {
+    background: #FCF3CF;
+}
+
+article.lh-copy ul {
+    padding-left: 2rem;
+}
+
+/*progress bar*/
+
+progress, progress[role] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    background-size: auto;
+    height: 16px;
+}
+progress::-webkit-progress-value {
+    background: #96ccff;
+}
+progress::-webkit-progress-bar {
+    background: white;
+}

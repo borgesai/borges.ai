@@ -1,0 +1,385 @@
+<div class="cf" itemprop="mainEntity" itemscope itemtype="http://schema.org/Book">
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article class="mw6 center bg-white br1 pv2 pv4-ns ph2 ph4-ns mt3-ns ba-ns b--black-10">
+            <div class="tc">
+                {{range .Book.Authors}}
+                    <div class="dib ma0">
+                        {{if .ImageURL}}
+                            <img src="{{.ImageURL}}" class="br-100 h3 w3 dib" title="{{.Name}}">
+                        {{else}}
+                            <svg class="br-100 h3 w3 dib" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+                                 style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+                                 viewBox="0 0 36 36">
+                                <g id="logo">
+                                    <circle fill="black" style="stroke-width:0;stroke-miterlimit:10;" cx="18" cy="18"
+                                            r="18"/>
+                                    <text x="50%" y="50%" fill="white" text-anchor="middle"
+                                          font-family="baskerville,serif" font-size="14px" stroke-width="0px" dy=".3em"
+                                          style="text-transform:lowercase">{{.AbbreviatedName}}</text>
+                                </g>
+                            </svg>
+                        {{end}}
+                        <h2 class="f6 gray">
+                            <a href="/a/{{.Slug}}" class="link gray" itemprop="author" itemscope
+                               itemtype="http://schema.org/Person">{{.Name}}</a>
+                        </h2>
+                    </div>
+                {{end}}
+                <hr class="mw3 bb bw1 b--black-10">
+                <h1 class="f4" itemprop="name">{{.Book.Title}}</h1>
+                <span class="f6" itemprop="alternateName">{{.Book.Subtitle}}</span>
+            </div>
+
+            {{if .Book.Edition}}
+                <div class="pt1 tl mt2 mb0">
+                    {{if .Book.Edition.ISBN13}}
+                        <dl class="f6 mt2 mb0">
+                            <dt class="dib gray ttl">ISBN:</dt>
+                            <dd class="dib ml0 ttl" itemprop="isbn">{{.Book.Edition.ISBN13}}</dd>
+                        </dl>
+                    {{else}}
+                        {{if .Book.Edition.ISBN}}
+                            <dl class="f6 mt2 mb0">
+                                <dt class="dib gray ttl">ISBN:</dt>
+                                <dd class="dib ml0 ttl" itemprop="isbn">{{.Book.Edition.ISBN}}</dd>
+                            </dl>
+                        {{end}}
+                    {{end}}
+
+                    {{if gt .Book.Edition.NumPages 0}}
+                        <dl class="f6 mt2 mb0">
+                            <dt class="dib gray ttl">Pages:</dt>
+                            <dd class="dib ml0 ttl" itemprop="numberOfPages">{{.Book.Edition.NumPages}}</dd>
+                        </dl>
+                    {{else}}
+                        {{if gt .Book.NumPages 0}}
+                            <dl class="f6 mt2 mb0">
+                                <dt class="dib gray ttl">Pages:</dt>
+                                <dd class="dib ml0 ttl" itemprop="numberOfPages">{{.Book.NumPages}}</dd>
+                            </dl>
+                        {{end}}
+                    {{end}}
+
+                    {{if gt .Book.Edition.PublicationYear 0}}
+                        <dl class="f6 mt2 mb0">
+                            <dt class="dib gray ttl">Year:</dt>
+                            <dd class="dib ml0 ttl">{{.Book.Edition.PublicationYear}}</dd>
+                        </dl>
+                    {{else}}
+                        {{if gt .Book.OriginalYear 0}}
+                            <dl class="f6 mt2 mb0">
+                                <dt class="dib gray ttl">Year:</dt>
+                                <dd class="dib ml0 ttl">{{.Book.OriginalYear}}</dd>
+                            </dl>
+                        {{end}}
+                    {{end}}
+                    {{if .Book.Edition.Publisher}}
+                        <dl class="f6 mt2 mb0" itemprop="publisher" itemtype="http://schema.org/Organization"
+                            itemscope="">
+                            <dt class="dib gray ttl">Publisher:</dt>
+                            <dd class="dib ml0 ttl" itemprop="name">{{.Book.Edition.Publisher}}</dd>
+                        </dl>
+                    {{end}}
+                </div>
+            {{end}}
+            {{if and (not .IsMine) (gt .User.ID 0)}}
+                <section class="mt2 mt4-ns">
+                    <form class="dib mv0 ml0 mr2 pa0" method="POST"
+                          action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/status">
+                        <input type="hidden" name="status" value="1">
+                        {{if .Book.Edition}}
+                            <input type="hidden" name="edition" value="{{.Book.Edition.ID}}">
+                        {{end}}
+                        <button class="pa0 input-reset bn bg-transparent sans-serif dib f7 tc pointer blue hover-black {{if eq .SessionUserReview.Status 1}}underline{{else}}{{end}}">
+                            already read
+                        </button>
+                    </form>
+                    <form class="dib mv0 ml0 mr2 pa0" method="POST"
+                          action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/status">
+                        <input type="hidden" name="status" value="2">
+                        {{if .Book.Edition}}
+                            <input type="hidden" name="edition" value="{{.Book.Edition.ID}}">
+                        {{end}}
+                        <button class="pa0 input-reset bn bg-transparent sans-serif dib f7 tc pointer blue hover-black {{if eq .SessionUserReview.Status 2}}underline{{else}}{{end}}">
+                            reading now
+                        </button>
+                    </form>
+                    <form class="dib mv0 ml0 mr2 pa0" method="POST"
+                          action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/status">
+                        <input type="hidden" name="status" value="3">
+                        {{if .Book.Edition}}
+                            <input type="hidden" name="edition" value="{{.Book.Edition.ID}}">
+                        {{end}}
+                        <button class="pa0 input-reset bn bg-transparent sans-serif dib f7 tc pointer blue hover-black {{if eq .SessionUserReview.Status 3}}underline{{else}}{{end}}">
+                            want to read
+                        </button>
+                    </form>
+                </section>
+            {{end}}
+        </article>
+
+    </div>
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article class="mt3-ns ph2 ph4-ns" itemscope itemprop="review" itemtype="http://schema.org/Review">
+            <section itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                <label class="f6 gray ttl mr1">rating:</label>
+                {{if .Readonly}}
+                    <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc"
+                          itemprop="ratingValue">{{.Book.Review.Rating}}</span>
+                {{else}}
+                    <form class="dib mv0 ml0 mr1 pa0"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/rating"{{end}}>
+                        <input type="hidden" name="rating" value="1">
+                        <input type="hidden" name="edition" value="{{.Book.Edition.ID}}">
+                        {{if not .Readonly}}
+                            <button class="hover-gray {{if not .Readonly}}pointer{{end}} input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 1}}underline{{else}}{{end}}">
+                                1
+                            </button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 1}}underline{{else}}{{end}}">1</span>
+                        {{end}}
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/rating"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="rating" value="2">
+                            <input type="hidden" name="edition" value="{{.Book.Edition.ID}}">
+                            <button class="hover-gray {{if not .Readonly}}pointer{{end}} input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 2}}underline{{else}}{{end}}">
+                                2
+                            </button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 2}}underline{{else}}{{end}}">2</span>
+                        {{end}}
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/rating"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="rating" value="3">
+                            <input type="hidden" name="edition" value="{{.Book.Edition.ID}}">
+                            <button class="hover-gray {{if not .Readonly}}pointer{{end}} input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 3}}underline{{else}}{{end}}">
+                                3
+                            </button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 3}}underline{{else}}{{end}}">3</span>
+                        {{end}}
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/rating"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="rating" value="4">
+                            <input type="hidden" name="edition" value="{{.Book.Edition.ID}}">
+                            <button class="hover-gray {{if not .Readonly}}pointer{{end}} input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 4}}underline{{else}}{{end}}">
+                                4
+                            </button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 4}}underline{{else}}{{end}}">4</span>
+                        {{end}}
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/rating"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="rating" value="5">
+                            <input type="hidden" name="edition" value="{{.Book.Edition.ID}}">
+                            <button class="hover-gray {{if not .Readonly}}pointer{{end}} input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 5}}underline{{else}}{{end}}">
+                                5
+                            </button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Rating 5}}underline{{else}}{{end}}">5</span>
+                        {{end}}
+                    </form>
+                {{end}}
+            </section>
+            <section class="mt2">
+                <label class="f6 gray ttl mr1">status:</label>
+                {{if .Readonly}}
+                    <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc">
+                        {{if eq .Book.Review.Status 1}}read{{end}}
+                        {{if eq .Book.Review.Status 2}}reading{{end}}
+                        {{if eq .Book.Review.Status 3}}want to read{{end}}
+                        {{if eq .Book.Review.Status 4}}want to reread{{end}}
+                        {{if eq .Book.Review.Status 5}}will not finish{{end}}
+                    </span>
+                {{else}}
+                    <form class="dib mv0 ml0 mr1 pa0 status-change status-1"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/status"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="status" value="1">
+                            <button class="hover-gray pointer input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 1}}underline{{else}}{{end}}">
+                                read
+                            </button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 1}}underline{{else}}{{end}}">read</span>
+                        {{end}}
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0 status-change status-2"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/status"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="status" value="2">
+                            <button class="hover-gray pointer input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 2}}underline{{else}}{{end}}">
+                                reading
+                            </button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 2}}underline{{else}}{{end}}">reading</span>
+                        {{end}}
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0 status-change status-3"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/status"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="status" value="3">
+                            <button class="hover-gray pointer input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 3}}underline{{else}}{{end}}">to read</button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 3}}underline{{else}}{{end}}">want to read</span>
+                        {{end}}
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0 status-change status-4"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/status"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="status" value="4">
+                            <button class="hover-gray pointer input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 4}}underline{{else}}{{end}}">
+                                want to reread
+                            </button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 4}}underline{{else}}{{end}}">to reread</span>
+                        {{end}}
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0 status-change status-5"
+                            {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/status"{{end}}>
+                        {{if not .Readonly}}
+                            <input type="hidden" name="status" value="5">
+                            <button class="hover-gray pointer input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 5}}underline{{else}}{{end}}">won't finish</button>
+                        {{else}}
+                            <span class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if eq .Book.Review.Status 5}}underline{{else}}{{end}}">will not finish</span>
+                        {{end}}
+                    </form>
+                {{end}}
+            </section>
+            {{if or (not .Readonly) (gt (len .Book.Readings) 0)}}
+                <section class="mt2">
+                    <label class="f6 gray ttl mr1">readings</label>
+                    <table class="mv1 lh-copy f6 w-100 center nowrap db overflow-x-auto" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th class="fw6 bb b--black-20 tl pl0 pb2 pr3 bg-white">started</th>
+                            <th class="fw6 bb b--black-20 tl pl0 pb2 pr3 bg-white">finished</th>
+                            <th class="fw6 bb b--black-20 tl pl0 pb2 pr3 bg-white">note</th>
+                            <th class="fw6 bb b--black-20 tl pl0 pb2 pr3 bg-white">duration</th>
+                        </tr>
+                        </thead>
+                        {{ $data := . }}
+                        <tbody class="lh-copy">
+                        {{if eq (len .Book.Readings) 0 }}
+                            <tr>
+                                <td class="nowrap ttl pl0 pr3">
+                                        <span class="reading-start-date editable {{if not $data.Readonly}}pointer{{end}}"
+                                              data-url="/api/@{{$data.User.Username}}/b/{{$data.Book.Slug}}-{{$data.Book.ShortID}}/readings/0/start-date"
+                                              data-pk="0"
+                                              data-value=""
+                                              data-format="YYYY-MM-DD"
+                                              data-viewformat="MMM D, YYYY"
+                                              data-template="MMM D, YYYY"
+                                              data-type="combodate">...</span>
+                                </td>
+                                <td class="nowrap ttl pl0 pr3">
+                                        <span class="reading-finish-date editable {{if not $data.Readonly}}pointer{{end}}"
+                                              data-url="/api/@{{$data.User.Username}}/b/{{$data.Book.Slug}}-{{$data.Book.ShortID}}/readings/0/finish-date"
+                                              data-pk="0"
+                                              data-value=""
+                                              data-format="YYYY-MM-DD"
+                                              data-viewformat="MMM D, YYYY"
+                                              data-template="MMM D, YYYY"
+                                              data-type="combodate">...</span>
+                                </td>
+                                <td class="nowrap ttl pl0 pr3 mw4 mw6-ns truncate">
+                                        <span class="reading-note editable {{if not $data.Readonly}}pointer{{end}}"
+                                              data-url="/api/@{{$data.User.Username}}/b/{{$data.Book.Slug}}-{{$data.Book.ShortID}}/readings/0/note"
+                                              data-pk="0"
+                                              data-value=""
+                                              data-type="text">...</span>
+                                </td>
+                                <td class="nowrap ttl pl0 pr3 reading-duration"></td>
+                            </tr>
+                        {{else}}
+                            {{ range .Book.Readings }}
+                                <tr>
+                                    <td class="nowrap ttl pl0 pr3">
+                                            <span
+                                                  {{if not $data.Readonly}}
+                                                      data-url="/api/@{{$data.User.Username}}/b/{{$data.Book.Slug}}-{{$data.Book.ShortID}}/readings/{{.ID}}/start-date"
+                                                      data-pk="{{.ID}}"
+                                                      data-value="{{if .StartDate.IsZero}}{{else}}{{.StartDate.Format "2006-01-02"}}{{end}}"
+                                                      data-format="YYYY-MM-DD"
+                                                      data-viewformat="YYYY-MM-DD"
+                                                      data-template="YYYY-MM-DD"
+                                                      data-type="combodate"
+                                                  {{end}}
+                                                  class="reading-start-date editable {{if not $data.Readonly}}pointer{{end}}">{{if .StartDate.IsZero}}...{{else}}{{.StartDate.Format "2006-01-02"}}{{end}}</span>
+                                    </td>
+                                    <td class="nowrap ttl pl0 pr3">
+                                            <span
+                                                  {{if not $data.Readonly}}
+                                                      data-url="/api/@{{$data.User.Username}}/b/{{$data.Book.Slug}}-{{$data.Book.ShortID}}/readings/{{.ID}}/finish-date"
+                                                      data-pk="{{.ID}}"
+                                                      data-value="{{if .FinishDate.IsZero}}{{else}}{{.FinishDate.Format "2006-01-02"}}{{end}}"
+                                                      data-format="YYYY-MM-DD"
+                                                      data-viewformat="YYYY-MM-DD"
+                                                      data-template="YYYY-MM-DD"
+                                                      data-type="combodate"
+                                                  {{end}}
+                                                class="reading-finish-date editable {{if not $data.Readonly}}pointer{{end}}">{{if .FinishDate.IsZero}}...{{else}}{{.FinishDate.Format "2006-01-02"}}{{end}}</span>
+                                    </td>
+                                    <td class="nowrap ttl pl0 pr3 mw4 mw6-ns truncate">
+                                        <span class="reading-note editable {{if not $data.Readonly}}pointer{{end}}"
+                                                  {{if not $data.Readonly}}
+                                                      data-url="/api/@{{$data.User.Username}}/b/{{$data.Book.Slug}}-{{$data.Book.ShortID}}/readings/{{.ID}}/note"
+                                                      data-pk="0"
+                                                      data-value=""
+                                                      data-type="text"
+                                                  {{end}}>{{.Note}}</span>
+                                    </td>
+                                    <td class="nowrap ttl pl0 pr3 reading-duration">{{.Duration}}</td>
+                                </tr>
+                            {{end}}
+                        {{end}}
+                        </tbody>
+                    </table>
+                </section>
+            {{end}}
+            {{if or (not .Readonly) (.Book.Review.Content)}}
+                <section class="mt2">
+                    <label class="f6 gray ttl mr1">review</label>
+                    <article class="lh-copy measure f5 editable {{if not .Readonly}}pointer{{end}}"
+                            {{if not .IsCustomDomain}}
+                                id="book_review"
+                                data-pk="{{.Book.ShortID}}"
+                                data-url="/api/@{{.User.Username}}/b/{{.Book.Slug}}-{{.Book.ShortID}}/review"
+                                data-title="leave review"
+                                data-placeholder="your review"
+                                data-type="textarea"
+                                data-value="{{.Book.Review.Content}}"
+                            {{end}}
+                             itemprop="reviewBody">{{.Book.Review.ContentHTMLEscaped}}</article>
+                </section>
+            {{end}}
+            {{if and (.Readonly) (.Book.Review.Content) }}
+                <section class="mt2">
+                    <label class="f6 gray ttl mr1">author:</label>
+                    <span itemprop="author"
+                          class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc">{{.Profile.Name}}</span>
+                </section>
+                <section class="mt2">
+                    <label class="f6 gray ttl mr1">published:</label>
+                    <span itemprop="datePublished"
+                          class="input-reset bn bg-transparent sans-serif dib ph0 f7 tc">{{.Book.Review.CreatedAt.Format "2006-01-02"}}</span>
+                </section>
+            {{end}}
+        </article>
+    </div>
+</div>
+
+{{if not .Readonly}}
+    <script>
+        $(function () {
+            initUserBookPage({{.Book.Edition.ID}});
+        });
+    </script>
+{{end}}

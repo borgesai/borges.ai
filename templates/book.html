@@ -1,0 +1,114 @@
+<div class="cf" itemprop="mainEntity" itemscope itemtype="http://schema.org/Book">
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article class="mw6 center bg-white br1 pv2 pv4-ns ph2 ph4-ns mt3-ns ba-ns b--black-10">
+            <div class="tc">
+                {{range .Book.Authors}}
+                    <div class="dib ma0">
+                        {{if .ImageURL}}
+                            <img src="{{.ImageURL}}" class="br-100 h3 w3 dib" title="{{.Name}}">
+                        {{else}}
+                            <svg class="br-100 h3 w3 dib" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+                                 style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+                                 viewBox="0 0 36 36">
+                                <g id="logo">
+                                    <circle fill="black" style="stroke-width:0;stroke-miterlimit:10;" cx="18" cy="18"
+                                            r="18"/>
+                                    <text x="50%" y="50%" fill="white" text-anchor="middle"
+                                          font-family="baskerville,serif" font-size="14px" stroke-width="0px" dy=".3em"
+                                          style="text-transform:lowercase">{{.AbbreviatedName}}</text>
+                                </g>
+                            </svg>
+                        {{end}}
+                        <h2 class="f6 gray">
+                            <a href="/a/{{.Slug}}" class="link gray" itemprop="author" itemscope itemtype="http://schema.org/Person">{{.Name}}</a>
+                        </h2>
+                    </div>
+                {{end}}
+                <hr class="mw3 bb bw1 b--black-10">
+                <h1 class="f4" itemprop="name">{{.Book.Title}}</h1>
+                <span class="f6" itemprop="alternateName">{{.Book.Subtitle}}</span>
+            </div>
+
+            {{if .Book.Edition}}
+                <div class="pv1 tl mt2">
+                    {{if .Book.Edition.ISBN13}}
+                        <dl class="f6 lh-title mv2">
+                            <dt class="dib gray ttl">ISBN:</dt>
+                            <dd class="dib ml0 ttl" itemprop="isbn">{{.Book.Edition.ISBN13}}</dd>
+                        </dl>
+                    {{else}}
+                        {{if .Book.Edition.ISBN}}
+                            <dl class="f6 lh-title mv2">
+                                <dt class="dib gray ttl">ISBN:</dt>
+                                <dd class="dib ml0 ttl" itemprop="isbn">{{.Book.Edition.ISBN}}</dd>
+                            </dl>
+                        {{end}}
+                    {{end}}
+
+                    {{if gt .Book.Edition.NumPages 0}}
+                        <dl class="f6 lh-title mv2">
+                            <dt class="dib gray ttl">Pages:</dt>
+                            <dd class="dib ml0 ttl" itemprop="numberOfPages">{{.Book.Edition.NumPages}}</dd>
+                        </dl>
+                    {{else}}
+                        {{if gt .Book.NumPages 0}}
+                            <dl class="f6 lh-title mv2">
+                                <dt class="dib gray ttl">Pages:</dt>
+                                <dd class="dib ml0 ttl" itemprop="numberOfPages">{{.Book.NumPages}}</dd>
+                            </dl>
+                        {{end}}
+                    {{end}}
+
+                    {{if gt .Book.Edition.PublicationYear 0}}
+                        <dl class="f6 lh-title mv2">
+                            <dt class="dib gray ttl">Year:</dt>
+                            <dd class="dib ml0 ttl">{{.Book.Edition.PublicationYear}}</dd>
+                        </dl>
+                    {{else}}
+                        {{if gt .Book.OriginalYear 0}}
+                            <dl class="f6 lh-title mv2">
+                                <dt class="dib gray ttl">Year:</dt>
+                                <dd class="dib ml0 ttl">{{.Book.OriginalYear}}</dd>
+                            </dl>
+                        {{end}}
+                    {{end}}
+                    {{if .Book.Edition.Publisher}}
+                        <dl class="f6 lh-title mv2" itemprop="publisher" itemtype="http://schema.org/Organization" itemscope="">
+                            <dt class="dib gray ttl">Publisher:</dt>
+                            <dd class="dib ml0 ttl" itemprop="name">{{.Book.Edition.Publisher}}</dd>
+                        </dl>
+                    {{end}}
+                </div>
+            {{end}}
+        </article>
+
+    </div>
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article class="mt3-ns ph2 ph4-ns">
+            {{ $data := . }}
+            <ol class="ph0 pv2 mt0 list measure">
+                {{ range .Book.Editions }}
+                    <li class="mb3">
+                        <a class="link black f6 b mb1" href="#">
+                            <span class="ttl">{{$data.Book.Title}}</span>
+                        </a>
+                        <div class="mt1 mb0 mh0">
+                            {{if .Publisher}}
+                                <span class="f7 ml0 mb0 mr1 gray ttl" title="{{.Publisher}}">Published by {{.Publisher}}</span>
+                            {{end}}
+                            {{if .NumPages}}
+                                <span class="f7 ml0 mb0 mr1 gray ttl" title="{{.NumPages}}">{{.NumPages}} pages</span>
+                            {{end}}
+                            {{if .PublicationYear}}
+                                <span class="f7 ml0 mb0 mr1 gray ttl" title="{{.PublicationYear}}">{{.PublicationYear}}</span>
+                            {{end}}
+                            {{if .IsEbook}}
+                                <span class="f7 ml0 mb0 mr1 gray ttl" title="ebook">ebook</span>
+                            {{end}}
+                        </div>
+                    </li>
+                {{ end }}
+            </ol>
+        </article>
+    </div>
+</div>

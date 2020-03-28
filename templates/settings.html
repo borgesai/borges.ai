@@ -1,0 +1,95 @@
+<div class="cf">
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article class="mw6 center bg-white br1 pv2 pv4-ns ph2 ph4-ns mt3-ns ba-ns b--black-10">
+            <div class="tc">
+                <div class="dib ma0">
+                    <svg class="br-100 h3 w3 dib" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+                         style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+                         viewBox="0 0 36 36">
+                        <g id="logo">
+                            <circle fill="black" style="stroke-width:0;stroke-miterlimit:10;" cx="18" cy="18" r="18"/>
+                            <text x="50%" y="50%" fill="white" text-anchor="middle" font-family="baskerville,serif"
+                                  font-size="14px" stroke-width="0px" dy=".3em"
+                                  style="text-transform:lowercase">{{.Profile.AbbreviatedName}}</text>
+                        </g>
+                    </svg>
+                    <h2 class="f6 gray">
+                        <a href="/@{{.Profile.Username}}" class="link gray" itemprop="name">{{.Profile.Name}}</a>
+                    </h2>
+                </div>
+                <hr class="mw3 bb bw1 b--black-10">
+            </div>
+
+            <div class="pv1 tl mt2">
+                {{if .Profile.TwitterLocation}}
+                    <dl class="f6 lh-title mv2">
+                        <dt class="dib gray ttl">Location:</dt>
+                        <dd class="dib ml0 ttl">{{.Profile.TwitterLocation}}</dd>
+                    </dl>
+                {{end}}
+                {{if .Profile.WebsiteURL}}
+                    <dl class="f6 lh-title mv2">
+                        <dt class="dib gray ttl">URL:</dt>
+                        <dd class="dib ml0 ttl">
+                            <a class="link black" href="{{.Profile.WebsiteURL}}">{{.Profile.WebsiteURL}}</a>
+                        </dd>
+                    </dl>
+                {{end}}
+                {{if .Profile.TwitterID}}
+                    <dl class="f6 lh-title mv2">
+                        <dt class="dib gray ttl">Twitter:</dt>
+                        <dd class="dib ml0 ttl">
+                            <a class="link black" href="https://twitter.com/@{{.Profile.Username}}">@{{.Profile.Username}}</a>
+                        </dd>
+                    </dl>
+                {{end}}
+            </div>
+        </article>
+    </div>
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article class="mt3-ns ph2 ph4-ns">
+                {{if .User.GoodreadsID}}
+                <h2 class="f7 gray ttu b">Goodreads</h2>
+                <section class="">
+                    <label class="f6 gray ttl mr1">sync to goodreads:</label>
+                    <form class="dib mv0 ml0 mr1 pa0"
+                          method="POST" action="/@{{.User.Username}}/s/goodreads/sync">
+                        <input type="hidden" name="redirect_to" value="/settings">
+                        <button class="hover-gray {{if not .Readonly}}pointer{{end}} input-reset bn bg-transparent sans-serif dib ph0 f7 tc underline">sync now</button>
+                    </form>
+                </section>
+                <section class="mt2">
+                    <label class="f6 gray ttl mr1">auto sync to goodreads:</label>
+                    <form class="dib mv0 ml0 mr1 pa0"
+                            method="POST" action="/@{{.User.Username}}/s/goodreads/sync-setting">
+                        <input type="hidden" name="enabled" value="true">
+                        <button class="hover-gray pointer input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if .User.GoodreadsSyncEnabled}}underline{{else}}{{end}}">on</button>
+                    </form>
+                    <form class="dib mv0 ml0 mr1 pa0"
+                          method="POST" action="/@{{.User.Username}}/s/goodreads/sync-setting">
+                        <input type="hidden" name="enabled" value="false">
+                        <button class="hover-gray pointer input-reset bn bg-transparent sans-serif dib ph0 f7 tc {{if not .User.GoodreadsSyncEnabled}}underline{{else}}{{end}}">off</button>
+                    </form>
+                </section>
+                {{end}}
+            <section class="mt3">
+                <h2 class="f7 gray ttu b">accounts</h2>
+                <ul class="list lh-copy measure f5 pl0">
+                    {{if not .User.GoodreadsID}}
+                    <li>- <a data-no-instant="true" class="link blue f5 dib ttl" href="/goodreads/login" title="join via goodreads">connect goodreads</a></li>
+                    {{else}}
+                        <li>- <a data-no-instant="true" class="link blue f5 dib ttl" href="{{.Profile.GoodreadsURL}}" title="goodreads account">goodreads</a></li>
+                    {{end}}
+                    {{if not .User.DropboxID}}
+                    <li>- <a data-no-instant="true" class="link blue f5 dib ttl" href="/dropbox/login" title="connect dropbox">connect dropbox</a></li>
+                    {{else}}
+                        <li>- <a data-no-instant="true" class="link blue f5 dib ttl" href="https://www.dropbox.com/account" title="dropbox account">dropbox</a></li>
+                    {{end}}
+                    {{if .User.TwitterID}}
+                        <li>- <a data-no-instant="true" class="link blue f5 dib ttl" href="https://twitter.com/@{{.Profile.Username}}" title="twitter account">twitter</a></li>
+                    {{end}}
+                </ul>
+            </section>
+        </article>
+    </div>
+</div>

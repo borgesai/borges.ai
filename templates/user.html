@@ -1,0 +1,154 @@
+<div class="cf">
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article itemscope itemtype="http://schema.org/Person" class="mw6 center bg-white br1 pv2 pv4-ns ph2 ph4-ns mt3-ns ba-ns b--black-10">
+            <div class="tc">
+                <div class="dib ma0">
+                    <svg itemprop="image" class="br-100 h3 w3 dib" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+                         style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+                         viewBox="0 0 36 36">
+                        <g id="logo">
+                            <circle fill="black" style="stroke-width:0;stroke-miterlimit:10;" cx="18" cy="18" r="18"/>
+                            <text x="50%" y="50%" fill="white" text-anchor="middle" font-family="baskerville,serif"
+                                  font-size="14px" stroke-width="0px" dy=".3em"
+                                  style="text-transform:lowercase">{{.Profile.AbbreviatedName}}</text>
+                        </g>
+                    </svg>
+                    <h2 class="f6 gray">
+                        <a href="/@{{.Profile.Username}}" class="link gray" itemprop="name">{{.Profile.Name}}</a>
+                    </h2>
+                </div>
+                <hr class="mw3 bb bw1 b--black-10">
+            </div>
+
+            <div class="pv1 tl mt2">
+                {{if .Profile.TwitterLocation}}
+                    <dl class="f6 lh-title mv2">
+                        <dt class="dib gray ttl">Location:</dt>
+                        <dd class="dib ml0 ttl" itemprop="addressLocality">{{.Profile.TwitterLocation}}</dd>
+                    </dl>
+                {{end}}
+                {{if .Profile.WebsiteURL}}
+                    <dl class="f6 lh-title mv2">
+                        <dt class="dib gray ttl">URL:</dt>
+                        <dd class="dib ml0 ttl">
+                            <a class="link black" href="{{.Profile.WebsiteURL}}" itemprop="url">{{.Profile.WebsiteURL}}</a>
+                        </dd>
+                    </dl>
+                {{end}}
+                {{if .Profile.TwitterID}}
+                    <dl class="f6 lh-title mv2">
+                        <dt class="dib gray ttl">Twitter:</dt>
+                        <dd class="dib ml0 ttl">
+                            <a class="link black" href="https://twitter.com/@{{.Profile.Username}}">@{{.Profile.Username}}</a>
+                        </dd>
+                    </dl>
+                {{end}}
+            </div>
+        </article>
+    </div>
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article class="mt3-ns ph2 ph4-ns">
+            {{if .ShowActions}}
+                <section class="mt0">
+                    <h2 class="f7 gray ttu b">do this</h2>
+                    {{if .User.GoodreadsID}}
+                        <form class="dib mv0 ml0 mr1 pa0"
+                                {{if not .Readonly}} method="POST" action="/@{{.User.Username}}/s/goodreads/sync"{{end}}>
+                            <input type="hidden" name="redirect_to" value="/@{{.User.Username}}">
+                            {{if not .Readonly}}
+                                <button class="hover-gray {{if not .Readonly}}pointer{{end}} input-reset bn bg-transparent sans-serif dib ph0 f7 tc underline">
+                                    sync goodreads
+                                </button>
+                            {{end}}
+                        </form>
+                    {{else}}
+                        <ul class="list lh-copy measure f5 pl0">
+                            <li>- connect <a data-no-instant="true" class="link blue f5 dib ttl" href="/goodreads/login" title="join via goodreads">goodreads</a></li>
+                            <li>- search and <a data-no-instant="true" class="link blue f5 dib ttl" href="/search" title="join via goodreads">add books</a></li>
+                        </ul>
+                    {{end}}
+                </section>
+            {{else}}
+                <section class="">
+                    <nav class="mb2">
+                        <a class="f6 no-underline hover-dark-blue dib ttl mr2 mr1-ns{{if eq .Submenu `read`}} dark-blue{{else}} blue{{end}}"
+                           title="Read" href="/{{if not .IsCustomDomain}}@{{.Profile.Username}}{{end}}">Read</a>
+                        <a class="f6 no-underline hover-dark-blue dib ttl mr2 mr1-ns{{if eq .Submenu `reading`}} dark-blue{{else}} blue{{end}}"
+                           title="Currently reading" href="/{{if not .IsCustomDomain}}@{{.Profile.Username}}/{{end}}reading">Reading</a>
+                        <a class="f6 no-underline hover-dark-blue dib ttl mr2 mr1-ns{{if eq .Submenu `to-read`}} dark-blue{{else}} blue{{end}}"
+                           title="Want to read" href="/{{if not .IsCustomDomain}}@{{.Profile.Username}}/{{end}}to-read">Want to read</a>
+                        <a class="f6 no-underline hover-dark-blue dib ttl mr2 mr1-ns{{if eq .Submenu `best`}} dark-blue{{else}} blue{{end}}"
+                           title="Best books" href="/{{if not .IsCustomDomain}}@{{.Profile.Username}}/{{end}}best">Best</a>
+                        <a class="f6 no-underline hover-dark-blue dib ttl mr2 mr1-ns{{if eq .Submenu `charts`}} dark-blue{{else}} blue{{end}}"
+                           title="Charts" href="/{{if not .IsCustomDomain}}@{{.Profile.Username}}/{{end}}charts">charts</a>
+                    </nav>
+
+
+                    <div class="cf">
+                        <dl class="fl fn-l w-25 dib-l w-auto-l lh-title mr4-l">
+                            <dd class="f6 fw4 ml0">total</dd>
+                            <dd class="f5 fw6 ml0">{{len .Books}}</dd>
+                        </dl>
+
+                        {{if gt .AverageRating 0.0}}
+                            <dl class="fl fn-l w-25 dib-l w-auto-l lh-title mr4-l">
+                                <dd class="f6 fw4 ml0">avg rating</dd>
+                                <dd class="f5 fw6 ml0">{{.AverageRating | formatFloat32}}</dd>
+                            </dl>
+                        {{end}}
+                        {{if gt .ReviewsCount 0}}
+                            <dl class="fl fn-l w-25 dib-l w-auto-l lh-title mr4-l">
+                                <dd class="f6 fw4 ml0">reviews</dd>
+                                <dd class="f5 fw6 ml0">{{.ReviewsCount}}</dd>
+                            </dl>
+                        {{end}}
+                    </div>
+                    {{ $data := . }}
+                    <ol class="ph0 pv2 mt0 list measure">
+                        {{ range .Books }}
+                            <li class="mb3">
+                                <a class="link black f6 b mb1" href="/{{if not $data.IsCustomDomain}}@{{ $data.Profile.Username}}/{{end}}b/{{.Slug}}-{{.ShortID}}">
+                                    <span class="ttl">{{.Title}}</span>
+                                    <span class="ttl">by</span>
+
+                                    {{ range .AuthorsCache }}
+                                        <span class="ttl">{{.}}</span>
+                                    {{end}}
+
+                                </a>
+                                <div class="mt1 mb0 mh0">
+                                    {{if .Review.Rating}}
+                                        <span class="f7 ml0 mb0 mr1 gray" title="{{.Review.Rating}}/5">
+                                    {{range loop .Review.Rating}}
+                                        ★
+                                    {{end}}
+                                    </span>
+                                    {{end}}
+                                    {{if .Reading.FinishDate.IsZero}}
+                                        <span class="f7 ttl">{{.Review.StatusDate.Format "Jan 02, 2006"}}</span>
+                                    {{else}}
+                                        <span class="f7 ttl">{{.Reading.FinishDate.Format "Jan 02, 2006"}}</span>
+                                    {{end}}
+
+                                    {{if .Edition}}
+                                        {{if .Edition.NumPages}}
+                                            <span class="f7 ml0 mb0 mr1 gray ttl" title="{{.Edition.NumPages}}">{{.Edition.NumPages}} pages</span>
+                                        {{end}}
+                                    {{end}}
+                                    {{if .Reading}}
+                                        {{if .Reading.Duration}}
+                                            <span class="f7 ml0 mb0 mr1 gray ttl" title="took {{.Reading.Duration}} days">{{.Reading.Duration}} days</span>
+                                        {{end}}
+                                    {{end}}
+                                    {{if .Review.Content}}
+                                        <span class="f7 ml0 mb0 mr1 gray ttl" title="has review">has review</span>
+                                    {{end}}
+                                </div>
+                            </li>
+                        {{ end }}
+                    </ol>
+                </section>
+            {{end}}
+        </article>
+    </div>
+</div>

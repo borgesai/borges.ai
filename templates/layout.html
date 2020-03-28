@@ -1,0 +1,53 @@
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport">
+    <link rel="icon" type="image/png" href="/logo.png">
+    <title>{{ .Title }}</title>
+    <meta property="og:title" content="{{ .Title }}">
+    {{if .CanonicalURL}}
+    <link rel="canonical" href="{{.CanonicalURL}}">
+    <meta property="og:url" content="{{.CanonicalURL}}">
+    {{end}}
+    {{if eq .Page "user_book"}}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@borges_ai">
+        {{if .User.TwitterID}}
+    <meta name="twitter:creator" content="@{{.User.Username}}">
+        {{end}}
+    {{end}}
+    <link rel="stylesheet" href="/index.css"/>
+    <script src="/bundle.js"></script>
+</head>
+<body class="w-100 bg-white">
+<header class="pt1 dt w-100 border-box sans-serif">
+    <nav class="w-100 border-box pv2 ph1 ph5-ns">
+        <a class="v-top mid-gray link dib" href="/" title="Home">
+            <svg height="26px" width="26px" fill="#000000" version="1.1" style="shape-rendering:geometricPrecision;text-rendering:geometricPrecision;image-rendering:optimizeQuality;height: 26px;width: 26px;" viewBox="0 0 10000 10000" x="0px" y="0px" fill-rule="evenodd" clip-rule="evenodd"><g><path d="M3150 4606l789 0 0 788 -789 0 0 -788zm1454 0l789 0 0 788 -789 0 0 -788zm1455 0l789 0 0 788 -789 0 0 -788zm3441 -4106l0 9000 -9000 0 0 -9000 9000 0zm-493 493l-8014 0 0 8014 8014 0 0 -8014z"></path></g></svg>
+        </a>
+        <div class="v-top dib fr">
+            {{if not .IsCustomDomain}}
+            {{ if (gt .User.ID 0) }}
+                <a data-no-instant="true" class="link dim dark-gray f6 dib ttl" href="/search" title="add book">add book</a>
+                <a data-no-instant="true" class="link dim dark-gray f6 dib ttl" href="/settings" title="settings">settings</a>
+                <a data-no-instant="true" class="link dim dark-gray f6 dib ttl" href="/logout" title="logout">logout</a>
+            {{ else }}
+                <a data-no-instant="true" class="link dim dark-gray f6 dib ttl" href="/twitter/login" title="join/login">join/login</a>
+            {{ end }}
+            {{end}}
+        </div>
+    </nav>
+</header>
+
+<main class="center ph1 athelas">
+    {{ yield }}
+</main>
+{{if .ShowFooter}}
+<footer class="pv4 ph3 ph5-m ph6-l mid-gray">
+    <small class="f6 db tc">© 2020 <span class="">Borges</span></small>
+</footer>
+{{end}}
+<script data-no-instant="true">InstantClick.init();</script>
+</body>
+</html>

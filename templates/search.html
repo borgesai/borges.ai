@@ -1,0 +1,140 @@
+<section class="measure center ph1 ph0-ns pv2 athelas">
+    <form class="mw7 center pa3 ba-ns b--black-10 br1">
+        <fieldset class="cf bn ma0 pa0">
+            <div class="cf">
+                <label class="clip" for="query">search</label>
+                <input class="f6 f5-l input-reset bn fl black-80 bg-white pa3 lh-solid w-100 w-75-m w-80-l"
+                       placeholder="isbn or title" type="text" name="query" value="{{.Query}}" id="query">
+                <input class="f6 f5-l button-reset fl pv3 tc bg-light-gray bn color-animate hover-gray pointer w-100 w-25-m w-20-l ttl dark-gray"
+                       type="submit" value="Search">
+            </div>
+        </fieldset>
+    </form>
+</section>
+{{ $data := . }}
+<section class="cf w-100">
+    {{ range .Books}}
+        <div class="fl w-100 w-third-m w-25-ns">
+            <div class="aspect-ratio aspect-ratio--5x7">
+                <div class="aspect-ratio--object ph3 pv0">
+                    <article class="mw6 center bg-white br1 pv2 pv4-ns ph2 ph4-ns mt3-ns ba-ns b--black-10 min-height-24 relative">
+                        <div class="tc">
+                            {{range .Authors}}
+                                {{if not .Role}}
+                                    <div class="dib ma0">
+                                        {{if .ImageURL}}
+                                            <img src="{{.ImageURL}}" class="br-100 h3 w3 dib" title="{{.Name}}">
+                                        {{else}}
+                                            <svg class="br-100 h3 w3 dib" xmlns="http://www.w3.org/2000/svg"
+                                                 xml:space="preserve"
+                                                 style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+                                                 viewBox="0 0 36 36">
+                                                <g id="logo">
+                                                    <circle fill="black" style="stroke-width:0;stroke-miterlimit:10;" cx="18"
+                                                            cy="18"
+                                                            r="18"/>
+                                                    <text x="50%" y="50%" fill="white" text-anchor="middle"
+                                                          font-family="baskerville,serif" font-size="14px" stroke-width="0px"
+                                                          dy=".3em"
+                                                          style="text-transform:lowercase">{{.AbbreviatedName}}</text>
+                                                </g>
+                                            </svg>
+                                        {{end}}
+                                        <h2 class="f6 gray">
+                                            <a href="/a/{{.Slug}}" class="link gray">{{.Name}}</a>
+                                        </h2>
+                                    </div>
+                                {{end}}
+                            {{end}}
+                            <hr class="mw3 bb bw1 b--black-10">
+                            <h1 class="f4">
+                                {{if gt .Review.Status 0}}
+                                    <a href="/@{{ $data.User.Username}}/b/{{.Slug}}-{{.ShortID}}"
+                                       class="link black">{{.Title}}</a>
+                                {{else}}
+                                    <a href="/b/{{.Slug}}-{{.ShortID}}" class="link black">{{.Title}}</a>
+                                {{end}}
+                            </h1>
+                            <span class="f6">{{.Subtitle}}</span>
+                        </div>
+
+                        {{if .Edition}}
+                            <div class="pv1 tl mt2">
+                                {{if .Edition.ISBN13}}
+                                    <dl class="f6 lh-title mv2">
+                                        <dt class="dib gray ttl">ISBN:</dt>
+                                        <dd class="dib ml0 ttl">{{.Edition.ISBN13}}</dd>
+                                    </dl>
+                                {{else}}
+                                    {{if .Edition.ISBN}}
+                                        <dl class="f6 lh-title mv2">
+                                            <dt class="dib gray ttl">ISBN:</dt>
+                                            <dd class="dib ml0 ttl">{{.Edition.ISBN}}</dd>
+                                        </dl>
+                                    {{end}}
+                                {{end}}
+                                {{if .Edition.NumPages}}
+                                    <dl class="f6 lh-title mv2">
+                                        <dt class="dib gray ttl">Pages:</dt>
+                                        <dd class="dib ml0 ttl">{{.Edition.NumPages}}</dd>
+                                    </dl>
+                                {{end}}
+                                {{if gt .Edition.PublicationYear 0}}
+                                    <dl class="f6 lh-title mv2">
+                                        <dt class="dib gray ttl">Year:</dt>
+                                        <dd class="dib ml0 ttl">{{.Edition.PublicationYear}}</dd>
+                                    </dl>
+                                {{else}}
+                                    {{if gt .OriginalYear 0}}
+                                        <dl class="f6 lh-title mv2">
+                                            <dt class="dib gray ttl">Year:</dt>
+                                            <dd class="dib ml0 ttl">{{.OriginalYear}}</dd>
+                                        </dl>
+                                    {{end}}
+                                {{end}}
+                                {{if .Edition.Publisher}}
+                                    <dl class="f6 lh-title mv2">
+                                        <dt class="dib gray ttl">Publisher:</dt>
+                                        <dd class="dib ml0 ttl">{{.Edition.Publisher}}</dd>
+                                    </dl>
+                                {{end}}
+                            </div>
+                        {{end}}
+                        <section class="bottom-1 absolute">
+                            <form class="dib mv0 ml0 mr2 pa0" method="POST"
+                                  action="/@{{$data.User.Username}}/b/{{.Slug}}-{{.ShortID}}/status">
+                                <input type="hidden" name="status" value="1">
+                                {{if $data.SearchedByISBN}}
+                                    <input type="hidden" name="edition" value="{{.Edition.ID}}">
+                                {{end}}
+                                <button class="pa0 input-reset bn bg-transparent sans-serif dib f7 tc pointer blue hover-black {{if eq .Review.Status 1}}underline{{else}}{{end}}">
+                                    already read
+                                </button>
+                            </form>
+                            <form class="dib mv0 ml0 mr2 pa0" method="POST"
+                                  action="/@{{$data.User.Username}}/b/{{.Slug}}-{{.ShortID}}/status">
+                                <input type="hidden" name="status" value="2">
+                                {{if $data.SearchedByISBN}}
+                                    <input type="hidden" name="edition" value="{{.Edition.ID}}">
+                                {{end}}
+                                <button class="pa0 input-reset bn bg-transparent sans-serif dib f7 tc pointer blue hover-black {{if eq .Review.Status 2}}underline{{else}}{{end}}">
+                                    reading now
+                                </button>
+                            </form>
+                            <form class="dib mv0 ml0 mr2 pa0" method="POST"
+                                  action="/@{{$data.User.Username}}/b/{{.Slug}}-{{.ShortID}}/status">
+                                <input type="hidden" name="status" value="3">
+                                {{if $data.SearchedByISBN}}
+                                    <input type="hidden" name="edition" value="{{.Edition.ID}}">
+                                {{end}}
+                                <button class="pa0 input-reset bn bg-transparent sans-serif dib f7 tc pointer blue hover-black {{if eq .Review.Status 3}}underline{{else}}{{end}}">
+                                    want to read
+                                </button>
+                            </form>
+                        </section>
+                    </article>
+                </div>
+            </div>
+        </div>
+    {{end}}
+</section>

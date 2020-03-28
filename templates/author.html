@@ -1,0 +1,70 @@
+<div class="cf">
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article itemscope itemtype="http://schema.org/Person" class="mw6 center bg-white br1 pv2 pv4-ns ph2 ph4-ns mt3-ns ba-ns b--black-10">
+            <div class="tc">
+                <div class="dib ma0">
+                    {{if .Author.ImageURL}}
+                        <img src="{{.Author.ImageURL}}" class="br-100 h3 w3 dib" title="{{.Author.Name}}">
+                    {{else}}
+                        <svg itemprop="image" class="br-100 h3 w3 dib" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+                             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+                             viewBox="0 0 36 36">
+                                <g id="logo">
+                                    <circle fill="black" style="stroke-width:0;stroke-miterlimit:10;" cx="18" cy="18"
+                                            r="18"/>
+                                    <text x="50%" y="50%" fill="white" text-anchor="middle"
+                                          font-family="baskerville,serif" font-size="14px" stroke-width="0px" dy=".3em"
+                                          style="text-transform:lowercase">{{.Author.AbbreviatedName}}</text>
+                                </g>
+                            </svg>
+                    {{end}}
+                    <h2 class="f6 gray">
+                        <a href="/a/{{.Author.Slug}}" class="link gray" itemprop="name">{{.Author.Name}}</a>
+                    </h2>
+                </div>
+                <hr class="mw3 bb bw1 b--black-10">
+            </div>
+        </article>
+
+    </div>
+    <div class="fl w-100 w-50-ns pv3-ns pv0">
+        <article class="mt3-ns ph2 ph4-ns">
+            <section class="">
+                <nav class="mb2">
+                    <a class="f6 no-underline underline-hover blue dib ttl" title="Read" href="/a/{{.Author.Slug}}">books</a>
+                </nav>
+                <div class="cf">
+                    <dl class="fl fn-l w-25 dib-l w-auto-l lh-title mr4-l">
+                        <dd class="f6 fw4 ml0">total</dd>
+                        <dd class="f5 fw6 ml0">{{len .Books}}</dd>
+                    </dl>
+
+                </div>
+                {{ $data := . }}
+                <ol class="ph0 pv2 mt0 list measure">
+                    {{ range .Books }}
+                        <li class="mb3">
+                            <a class="link black f6 b mb1" href="/b/{{.Slug}}-{{.ShortID}}">
+                                <span class="ttl">{{.Title}}</span>
+                            </a>
+                            <div class="mt1 mb0 mh0">
+                                {{if .Edition.Publisher}}
+                                    <span class="f7 ml0 mb0 mr1 gray ttl" title="{{.Edition.Publisher}}">Published by {{.Edition.Publisher}}</span>
+                                {{end}}
+                                {{if .Edition.NumPages}}
+                                    <span class="f7 ml0 mb0 mr1 gray ttl" title="{{.Edition.NumPages}}">{{.Edition.NumPages}} pages</span>
+                                {{end}}
+                                {{if .Edition.PublicationYear}}
+                                    <span class="f7 ml0 mb0 mr1 gray ttl" title="{{.Edition.PublicationYear}}">{{.Edition.PublicationYear}}</span>
+                                {{end}}
+                                {{if .Edition.IsEbook}}
+                                    <span class="f7 ml0 mb0 mr1 gray ttl" title="ebook">ebook</span>
+                                {{end}}
+                            </div>
+                        </li>
+                    {{end}}
+                </ol>
+            </section>
+        </article>
+    </div>
+</div>

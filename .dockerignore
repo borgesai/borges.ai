@@ -1,0 +1,6 @@
+.git
+.cache
+frontend
+*.md
+*.zip
+.elasticbeanstalk

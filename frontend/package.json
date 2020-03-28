@@ -1,0 +1,23 @@
+{
+  "name": "borges.bundler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp scripts && gulp css",
+    "build-prod": "gulp scripts && gulp css && gulp compress && gulp minify-css"
+  },
+  "keywords": [],
+  "author": "Anton Podviaznikov",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.7.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-minify": "^1.0.0"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "moment": "^2.18.1"
+  }
+}
