@@ -6,14 +6,11 @@ Borges.ai is an experiment to build better Goodreads experiment.
 
 ## Next task
 
- - reading/table formatting edit mode on mobile
  - use metrics to report to the cloudwatch
- - add link to borges at the end of each review
  - add buttons to read book when browsing other peoples pages
  - settings: username
  - specify location and specify email in setting. Can we do autocomplete for location? 
  - signup via email
- - add button to fully sync dropbox
  - can I use HTTP2 to send some HTML for long requests? when I do post for sync?
  - improve author page https://borges.ai/a/neil_postman
  - save last visit date for user
